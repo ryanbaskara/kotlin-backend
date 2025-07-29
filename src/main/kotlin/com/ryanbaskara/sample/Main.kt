@@ -5,6 +5,7 @@ import com.ryanbaskara.sample.delivery.http.setupRouter
 import com.ryanbaskara.sample.infrastructure.database.Database
 import com.ryanbaskara.sample.infrastructure.database.UserRepositoryImpl
 import com.ryanbaskara.sample.usecase.UserUseCase
+import io.github.cdimascio.dotenv.dotenv
 import io.vertx.core.Vertx
 import kotlinx.coroutines.runBlocking
 
@@ -20,9 +21,12 @@ fun main(args: Array<String>) {
 
         val router = setupRouter(vertx, userHandler)
 
+        val dotenv = dotenv()
+        val serverPort = dotenv["SERVER_PORT"]
+
         vertx.createHttpServer()
             .requestHandler(router)
-            .listen(7725) { ar ->
+            .listen(serverPort.toInt()) { ar ->
                 if (ar.succeeded()) {
                     println("✅ Server running at http://localhost:7725")
                 } else {

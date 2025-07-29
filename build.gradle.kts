@@ -26,6 +26,8 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.10.1")
 
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
+
     testImplementation(kotlin("test"))
 }
 
