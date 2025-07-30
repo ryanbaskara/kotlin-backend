@@ -35,4 +35,24 @@ class UserHandler(private val useCase: UserUseCase) {
             }
         }
     }
+
+    fun getUserById(ctx: RoutingContext) {
+        val id = ctx.pathParam("id")?.toIntOrNull()
+        if (id == null) {
+            ctx.response().setStatusCode(400).end("Invalid ID")
+            return
+        }
+
+        useCase.getUserByID(id).onSuccess { user ->
+            if (user != null) {
+                ctx.response()
+                    .putHeader("Content-Type", "application/json")
+                    .end("""{"id":${user.id},"name":"${user.name}","email":"${user.email}"}""")
+            } else {
+                ctx.response().setStatusCode(404).end("User not found")
+            }
+        }.onFailure { err ->
+            ctx.response().setStatusCode(500).end("Error: ${err.message}")
+        }
+    }
 }

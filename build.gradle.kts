@@ -17,7 +17,7 @@ dependencies {
     implementation("io.vertx:vertx-web:4.5.1")
     implementation("io.vertx:vertx-lang-kotlin:4.5.1")
     implementation("io.vertx:vertx-lang-kotlin-coroutines:4.5.1")
-    implementation("io.vertx:vertx-jdbc-client:4.5.1")
+    implementation("io.vertx:vertx-mysql-client:4.5.1")
     implementation("mysql:mysql-connector-java:8.0.33")
 
     implementation("io.reactivex.rxjava3:rxjava:3.1.6")

@@ -2,12 +2,16 @@ package com.ryanbaskara.sample.infrastructure.database
 
 import com.ryanbaskara.sample.domain.model.User
 import com.ryanbaskara.sample.domain.repository.UserRepository
+import io.vertx.core.Future
 import io.vertx.kotlin.coroutines.await
+import io.vertx.sqlclient.Pool
 import io.vertx.sqlclient.Row
 import io.vertx.sqlclient.SqlClient
 import io.vertx.sqlclient.Tuple
 
-class UserRepositoryImpl(private val client: SqlClient) : UserRepository {
+class UserRepositoryImpl(
+    private val client: SqlClient
+    ) : UserRepository {
 
     private fun rowToUser(row: Row): User = User(
         id = row.getInteger("id"),
@@ -26,5 +30,17 @@ class UserRepositoryImpl(private val client: SqlClient) : UserRepository {
             .execute(Tuple.of(user.name, user.email)).await()
 
         return result.rowCount() > 0
+    }
+
+    override fun getUserById(id: Int): Future<User?> {
+        val query = "SELECT id, name, email FROM users WHERE id = ?"
+        return client.preparedQuery(query)
+            .execute(Tuple.of(id))
+            .map { rowSet ->
+                val row: Row? = rowSet.firstOrNull()
+                row?.let {
+                    rowToUser(it)
+                }
+            }
     }
 }

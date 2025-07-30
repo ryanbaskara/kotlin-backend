@@ -9,5 +9,6 @@ fun setupRouter(vertx: Vertx, handler: UserHandler): Router {
     router.get("/health").handler(handler::health)
     router.get("/users").handler(handler::getAllUsers)
     router.post("/users").handler(handler::createUser)
+    router.get("/users/:id").handler(handler::getUserById)
     return router
 }
